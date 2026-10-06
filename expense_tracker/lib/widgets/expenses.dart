@@ -32,6 +32,7 @@ class _ExpensesState extends State<Expenses> {
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
+      useSafeArea: true,
       isScrollControlled: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
       context: context,
@@ -84,6 +85,8 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     Widget mainContent = const Center(
       child: Text('No expenses found. Start adding some!'),
     );
@@ -94,6 +97,55 @@ class _ExpensesState extends State<Expenses> {
         onRemoveExpense: _removeExpense,
       );
     }
+
+    final totalCard = Container(
+      width: double.infinity,
+      margin: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Total Expenses',
+                  style: TextStyle(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onPrimary
+                        .withValues(alpha: 0.8),
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 350),
+                  child: Text(
+                    '\$${totalExpenses.toStringAsFixed(2)}',
+                    key: ValueKey(totalExpenses),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Icon(
+            Icons.account_balance_wallet_outlined,
+            size: 42,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ],
+      ),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -111,62 +163,40 @@ class _ExpensesState extends State<Expenses> {
           ),
         ],
       ),
+
       body: Column(
         children: [
-          Container(
-            width: double.infinity,
-            margin: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
+          totalCard,
+
+          Expanded(
+            child: width < 600
+                ? Column(
+                    children: [
+                      Chart(
+                        expenses: _registeredExpenses,
+                      ),
+                      Expanded(
+                        child: mainContent,
+                      ),
+                    ],
+                  )
+                : Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Total Expenses',
-                        style: TextStyle(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onPrimary
-                              .withValues(alpha: 0.8),
-                          fontSize: 14,
+                      Expanded(
+                        child: Chart(
+                          expenses: _registeredExpenses,
                         ),
                       ),
-                      const SizedBox(height: 6),
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 350),
-                        child: Text(
-                          '\$${totalExpenses.toStringAsFixed(2)}',
-                          key: ValueKey(totalExpenses),
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                      Expanded(
+                        child: mainContent,
                       ),
                     ],
                   ),
-                ),
-                Icon(
-                  Icons.account_balance_wallet_outlined,
-                  size: 42,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-              ],
-            ),
-          ),
-          Chart(expenses: _registeredExpenses),
-          Expanded(
-            child: mainContent,
           ),
         ],
       ),
+
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _openAddExpenseOverlay,
         icon: const Icon(Icons.add),

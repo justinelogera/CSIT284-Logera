@@ -20,10 +20,12 @@ void main() {
         ),
         scaffoldBackgroundColor: kCream,
         fontFamily: GoogleFonts.poppins().fontFamily,
+
         appBarTheme: const AppBarTheme(
           backgroundColor: kNavy,
           foregroundColor: kCream,
         ),
+
         cardTheme: const CardThemeData(
           color: Colors.white,
           margin: EdgeInsets.symmetric(
@@ -31,6 +33,7 @@ void main() {
             vertical: 8,
           ),
         ),
+
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: kBlue,
@@ -46,10 +49,12 @@ void main() {
         ),
         scaffoldBackgroundColor: kDarkBlue,
         fontFamily: GoogleFonts.poppins().fontFamily,
+
         appBarTheme: const AppBarTheme(
           backgroundColor: kNavy,
           foregroundColor: kCream,
         ),
+
         cardTheme: const CardThemeData(
           color: kDarkBlue,
           margin: EdgeInsets.symmetric(
@@ -57,6 +62,7 @@ void main() {
             vertical: 8,
           ),
         ),
+
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: kBlue,
